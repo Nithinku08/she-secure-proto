@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Risk Assessment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            padding: 2rem;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .result-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            flex: 1;
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        .comparison {
+            font-size: 0.9rem;
+            margin-top: 3px;
+            color: #555;
+        }
+
+        .above { color: #e74c3c; }
+        .below { color: #2ecc71; }
+
+        #result {
+            font-size: 1.1rem;
+        }
+
+        .result-placeholder {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 2rem;
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .result-container {
+                position: static;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="form-container">
+            <h2>Heart Disease Risk Assessment</h2>
+            <form id="prediction-form">
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age" required>
+                    <div class="comparison" id="cmp-age"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Chest Pain Type</label>
+                    <select name="chestPain" required>
+                        <option value="">Select Type</option>
+                        <option value="0">Typical Angina</option>
+                        <option value="1">Atypical Angina</option>
+                        <option value="2">Non-anginal Pain</option>
+                        <option value="3">Asymptomatic</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Resting Blood Pressure (mm Hg)</label>
+                    <input type="number" name="bloodPressure" required>
+                    <div class="comparison" id="cmp-bloodPressure"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Cholesterol (mg/dl)</label>
+                    <input type="number" name="cholesterol" required>
+                    <div class="comparison" id="cmp-cholesterol"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Fasting Blood Sugar > 120 mg/dl</label>
+                    <select name="bloodSugar" required>
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ECG Results</label>
+                    <select name="ecg" required>
+                        <option value="">Select</option>
+                        <option value="0">Normal</option>
+                        <option value="1">ST-T Wave Abnormality</option>
+                        <option value="2">Left Ventricular Hypertrophy</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Max Heart Rate</label>
+                    <input type="number" name="heartRate" required>
+                    <div class="comparison" id="cmp-heartRate"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Exercise Induced Angina</label>
+                    <select name="exerciseAngina" required>
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ST Depression</label>
+                    <input type="number" name="stDepression" step="0.1" required>
+                    <div class="comparison" id="cmp-stDepression"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Slope of ST</label>
+                    <select name="stSlope" required>
+                        <option value="">Select</option>
+                        <option value="0">Upsloping</option>
+                        <option value="1">Flat</option>
+                        <option value="2">Downsloping</option>
+                    </select>
+                </div>
+
+                <button type="submit">Assess Risk</button>
+            </form>
+        </div>
+
+        <div class="result-container">
+            <h2>Results</h2>
+            <div id="result">
+                <div class="result-placeholder">
+                    Enter your data and click "Assess Risk" to see results
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("prediction-form");
+        const result = document.getElementById("result");
+
+        // Average values from dataset (adjust based on actual data)
+        const averages = {
+            age: 54,
+            bloodPressure: 131,
+            cholesterol: 246,
+            heartRate: 149,
+            stDepression: 1.05
+        };
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            result.innerHTML = '<div class="result-placeholder">Calculating...</div>';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            for (let key in data) {
+                const value = parseFloat(data[key]);
+                data[key] = value;
+
+                const avg = averages[key];
+                const cmp = document.getElementById(`cmp-${key}`);
+                if (avg && cmp) {
+                    if (value > avg) {
+                        cmp.innerHTML = `<span class="above">Above average (${avg})</span>`;
+                    } else if (value < avg) {
+                        cmp.innerHTML = `<span class="below">Below average (${avg})</span>`;
+                    } else {
+                        cmp.textContent = `Average (${avg})`;
+                    }
+                }
+            }
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const res = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(res.error || "Server error");
+                }
+
+                if (res.health_status !== undefined) {
+                    const color = res.risk_level === "High" ? "#e74c3c" : "#27ae60";
+                    let comparisonsHtml = '<div style="margin-top: 20px; text-align: left;">';
+                    
+                    for (const [field, comparison] of Object.entries(res.comparisons)) {
+                        const statusColor = comparison.status === 'Above Average' ? '#e74c3c' : '#2ecc71';
+                        comparisonsHtml += `
+                            <div style="margin-bottom: 10px;">
+                                <strong>${field}:</strong> ${comparison.value} 
+                                (${comparison.status}, Average: ${comparison.average})
+                                <span style="color: ${statusColor}; margin-left: 5px;">●</span>
+                            </div>
+                        `;
+                    }
+                    comparisonsHtml += '</div>';
+
+                    result.innerHTML = `
+                        <div style="color: ${color}; margin-bottom: 20px; padding: 15px; border-radius: 5px; background-color: ${color === '#e74c3c' ? '#fdf3f2' : '#f0fff4'};">
+                            <strong>Health Status:</strong> ${res.health_status}<br>
+                            <strong>Risk Level:</strong> ${res.risk_level}<br>
+                            <strong>Risk Percentage:</strong> ${res.risk_percentage}%<br>
+                            <strong>Above Average Values:</strong> ${res.above_average_count} out of 5
+                        </div>
+                        <div style="font-size: 0.9em;">
+                            <strong>Detailed Comparison:</strong>
+                            ${comparisonsHtml}
+                        </div>
+                    `;
+                } else {
+                    throw new Error("Invalid response format from server");
+                }
+            } catch (err) {
+                result.innerHTML = `
+                    <div style="color: #e74c3c; padding: 10px; border: 1px solid #e74c3c; border-radius: 5px; background-color: #fdf3f2;">
+                        <strong>⚠️ Error:</strong><br>
+                        ${err.message}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html> 
